@@ -12,15 +12,22 @@ def create_dataframe(url):
 ###### 2. The values in each column have the same python type
 ###### 3. There are at least 10 rows in the DataFrame.
 
+
 def test_create_dataframe(df,column_names):
     ### condition 1
     if list(df) != column_names:
         raise ColumnError("Column name does not match")
+        
     ### condition 2
-    if len(df.dtypes.unique()) != 1:
-        raise TypeError("Values in each column do not have the same python type")
-    ### condition 1
+    ### to count how many unique types in each column 
+    ### return a list of intergers
+    dtypeCount =[df.iloc[:,i].apply(type).nunique() for i in range(df.shape[1])]
+    if dtypeCount != [1] * len(df.columns):
+        raise TypeError("Values in one or more column do not have the same python type")
+        
+    ### condition 3
     if len(df.index) < 10:
         raise LengthError("There are less than 10 rows in dataframe")
+        
     return True
 
